@@ -1,20 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react';
+import { usePlayerStore } from './playerStore';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+export default function RootComponent() {
+  const setupPlayer = usePlayerStore((state) => state.setupPlayer);
+  const unloadPlayer = usePlayerStore((state) => state.unloadPlayer);
+
+  useEffect(() => {
+    setupPlayer();
+    
+    // Cleanup on app unmount (optional, but good for hot reload/dev)
+    return () => {
+      // unloadPlayer(); 
+      // Note: In production, you might want to keep playing in background 
+      // so you might not want to unload here depending on your nav structure.
+    };
+  }, []);
+
+  return <YourAppNavigation />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
